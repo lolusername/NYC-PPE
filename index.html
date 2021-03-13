@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3pro.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js" integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+<link rel="stylesheet" href="style2.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js" integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ=" crossorigin="anonymous"></script>
+
+<body>
+    <div id="form-container">
+        <script form="https://docs.google.com/forms/d/1YCEttWwRrH7OX-WCwf_C0JpBQjWxBnXvhUXECkedw2w/viewform?embedded=true&hl=en">
+            (function(XHR) {
+                var open = XHR.prototype.open;
+                XHR.prototype.open = function(method, url, async, user, pass) {
+                    this._url = url;
+                    if (url.indexOf("gstatic.com") !== -1 ||
+                        url.indexOf("docs.google.com") !== -1) {
+                        url = "https://googleformrestyler.apixml.net/corsProxy.aspx?base64Url=" + btoa(url);
+                    }
+                    open.call(this, method, url, async, user, pass);
+                };
+            })(XMLHttpRequest);
+            (function() {
+                var script = document.currentScript ||
+                    /*Polyfill*/
+                    Array.prototype.slice.call(document.getElementsByTagName('script')).pop();
+                var URL = script.getAttribute('form');
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", URL);
+                xhr.onload = function() {
+                    document.write(xhr.response);
+                };
+                xhr.send();
+            })();
+        </script>
+    </div>
+    <main id="app" class=" jc--c ">
+        <header class="w-100">
+            <!-- app -->
+            <div class="modal-vue w-100">
+
+
+                <!-- overlay -->
+                <div class="overlay" v-if="showModal" @click="showModal = false"></div>
+
+                <!-- modal -->
+                <div id='pop-up' class="modal" v-show="showModal">
+                    <button class="close" @click="showModal = false">x</button>
+                    <h3 class="center">PPE + Reopening Supplies customer demand survey!</h3>
+                    <div class="center">
+                        <button class="already" v-if="showModal" @click="closeForm">Already Answered? Proceed to PPE Marketplace</button>
+                    </div>
+                    <div ref="formcontent" id="formcontent"></div>
+                </div>
+
+            </div>
+            <section class="heading-info d--f jc--c">
+                <div class="container  d--f ai--c ">
+                    <div class="w-34">
+                        <img class="w-100" src="PPE_Photo.jpeg" alt="">
+                    </div>
+                    <div class="description">
+                        <h1 class=" ">PPE + Reopening Supplies Marketplace</h1>
+
+
+                        As New York City reopens after Covid-19, small businesses, nonprofits, and other organizations throughout the five boroughs will need to purchase supplies in order to operate safely and efficiently. The Manufacturing and Industrial Innovation Council,
+                        with volunteer support from TTP and local industry partners have launched the NYC PPE + Reopening Supplies Marketplace. The Marketplace provides a one-stop-shop for businesses to find products such as (i) face masks and coverings,
+                        (ii) face shields, (iii) gloves, (iv) cleaning and disinfectant products, (v) thermometers, (vi) physical barriers and portable furniture, and (vi) other supplies needed for re-opening. This is the initial phase of the marketplace
+                        and it will continue to evolve with more features. The marketplace represents both local and regional suppliers and manufacturers to provide a wide-range of order minimums for purchase. <a href="https://maiic.nyc/ppe-guidelines-how-to-protect-your-staff/"
+                            id="inline-aside">PPE Guidelines: How to Protect Your Staff
+                        <a class="w-100" href="https://docs.google.com/forms/d/126x8Fw8rrOu2lptHcgpk8xH6_uUOn_VZOTV5CYu0nHU/viewform?edit_requested=true" target="_BLANK" id="submit">Submit  Your  Business</a>
+
+                    </div>
+                </div>
+
+            </section>
+
+        </header>
+        <section class="vendor-list container flex">
+
+
+
+            <div class="overlay" v-show="showModal" @click="showModal = false"></div>
+
+            <div :class="{sticky:navView}" id="nav">
+                <div name="filter" class="multi-button" id="filter-select">
+                    <h4 class="center">Filter by Category:</h4>
+
+                    <ul class="no-padding filters">
+                        <li v-for="category in categories" @click="vendors = category.vendorList" :class="{parent:category.isParent}">{{category.title}}</li>
+                    </ul>
+
+                    <div id="feedback-form" class="pt-5">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQBUMrkqvnMxFSmweTVbpDbIoHEyu5DxuUQHbiEgVOMfolJg/viewform?usp=sf_link
+
+                        " target="_BLANK">Didn’t find what you were looking for? Please let us know what additional products you’d like to see included in this directory</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <ul class="list">
+                <p class="legal w-100">
+
+                    To help keep your business, employees, and customers safe the City has compiled this directory of local and national suppliers and manufacturers of medical and non-medical PPE and other reopening supplies for Covid-19 related workplace modifications.
+                    Please be advised that neither the City of New York (“City”), nor any agency, officer, or employee of the City warrants the accuracy, reliability or timeliness of any information published in this document or website, nor endorses
+                    any content, viewpoints, products, or services linked from this document or website, and shall not be held liable for any losses caused by reliance on the accuracy, reliability or timeliness of such information. Portions of such information
+                    may be incorrect or not current. Any person or entity that relies on any information obtained from this document or website does so at his or her own risk.
+                </p>
+                <li v-for="vendor in vendors">
+
+                    <div>
+                        <h2>{{vendor.gsx$businessname.$t}}
+                            <span v-if="vendor.gsx$businesstype.$t =='MWBE'" class="MWBE-flag">Minority or Women Business Enterprise</span>
+
+                            <div class="url" v-if="vendor.gsx$contactinfo_4.$t">
+                                <a target="_BLANK" :href="linkFormat(vendor.gsx$contactinfo_4.$t)">
+                                   {{vendor.gsx$contactinfo_4.$t}}
+                                </a>
+                            </div>
+                        </h2>
+                        <div v-if="hasValidLogoImage(vendor)" class="logo" style="position: absolute;">
+                            <img style="height:100%" :src="vendor.gsx$logolink.$t" alt="">
+                        </div>
+                        <div class="info d--f jc--sb">
+
+                            <div class="w-100">
+                                <h4><strong>Product Types:</strong></h4>
+                                <template v-for="category in hasProduct(vendor)" :key='gsx$businessname.$t'>
+                                    
+                                    <div v-if="true" class="product-list face-mask">
+                                        <div>
+                                            <div>
+                                                <h6>{{category.title}}</h6>
+                                            </div><span class="bold">Minimum Order </span>
+                                            <span>
+                                                {{vendor['gsx$minimumorder'+category.suffix].$t}} 
+                                            </span>
+                       
+                                        </div>
+                                        <div>
+                                            <span class="bold">Delivery Estimate </span>
+                                            <span>
+                                                {{vendor['gsx$typicaldeliverytimeframe'+category.suffix].$t}} 
+                                            </span>
+                                        </div>
+                                    </div>
+                                
+                                </template>
+
+                            </div>
+                            <div class="contact">
+                                <h4><strong>Contact Info:</strong></h4>
+                                <p v-if="vendor.gsx$contactinfo.$t">
+                                    {{vendor.gsx$contactinfo.$t}}
+                                </p>
+                                <p v-if="vendor.gsx$contactinfo_2.$t">
+                                    <a :href="link(vendor.gsx$contactinfo_2.$t,'tel')">
+                                        {{vendor.gsx$contactinfo_2.$t}}
+                                    </a>
+                                </p>
+                                <p v-if="vendor.gsx$contactinfo_3.$t">
+                                    <a :href="link(vendor.gsx$contactinfo_3.$t,'mailto')">
+                                        {{vendor.gsx$contactinfo_3.$t}}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </section>
+    </main>
+
+    <hr>
+
+    <p class="my_aligncenter">
+        <img src="sbs_logo_all.png" alt="SBS logo" width=250 height=75>
+    </p>
+
+
+</body>
+
+</html>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                showModal: false,
+                vendors: [],
+                categories: [],
+                sheetID: '1HgSWydbdlyYnwSFTR9CbQ_Ia7EM1v9TFDBJGFCQuJnI',
+                showModal: false,
+                windowTop: 0,
+                navScrollTop: 0,
+                filterString: '',
+                navView: true
+            }
+        },
+        methods: {
+            fetchData() {
+                const url = `https://spreadsheets.google.com/feeds/list/${this.sheetID}/1/public/values?alt=json`
+                const _this = this
+                return axios.get(url).then((reply) => {
+                    const items = reply.data.feed.entry
+                    this.vendors = items
+                    this.vendorsAll = this.vendors
+                    const categoriesArray = Object.keys(this.vendors[0]).filter(i => {
+                        return i.toLowerCase().includes('$p-') || i.toLowerCase().includes('$c-')
+                    })
+                    categoriesArray.push('All')
+
+                    _this.categories = categoriesArray.map(i => {
+                        let legibleTitle = '';
+
+                        switch (i) {
+                            case 'gsx$p-facecoveringsmasks':
+                                legibleTitle = 'Face Coverings & Masks'
+                                break
+                            case 'gsx$c-fabriccoverings':
+                                legibleTitle = 'Fabric Coverings'
+                                break
+                            case 'gsx$c-surgicalmasks':
+                                legibleTitle = 'Surgical Masks'
+                                break
+                            case 'gsx$c-n95':
+                                legibleTitle = 'N95 Masks'
+                                break
+                            case 'gsx$p-faceshields':
+                                legibleTitle = 'Face Shields'
+                                break
+                            case 'gsx$p-gloves':
+                                legibleTitle = 'Gloves'
+                                break
+                            case "gsx$p-cleaninganddisinfectantproducts":
+                                legibleTitle = 'Cleaning & Disinfecting Products'
+                                break
+                            case "gsx$c-cleaningsupplieswipes":
+                                legibleTitle = 'Cleaning Supplies and Wipes'
+                                break
+                            case "gsx$c-handsanitizerstands":
+                                legibleTitle = 'Hand Sanitizer'
+                                break
+                            case "gsx$p-physicalenhancementsandportablefurniture":
+                                legibleTitle = 'Physical Enhancements & Portable Furniture'
+                                break
+                            case "gsx$c-barriers":
+                                legibleTitle = 'Barriers'
+                                break
+                            case "gsx$c-outdoorfurnitureandstructures":
+                                legibleTitle = 'Outdoor Furniture/Structures'
+                                break
+                            case "gsx$c-socialdistancingsignage":
+                                legibleTitle = 'Social Distancing Signage'
+                                break
+                            case "gsx$p-heaters":
+                                legibleTitle = "Heaters"
+                                break
+                            case "gsx$c-electricalheaters":
+                                legibleTitle = "Electrical heaters"
+                                break
+                            case "gsx$c-propaneheaters":
+                                legibleTitle = "Propane heaters"
+                                break
+                            case "gsx$c-naturalgasheaters":
+                                legibleTitle = "Natural gas heaters"
+                                break
+                            case "gsx$p-tents":
+                                legibleTitle = 'Tents'
+                                break
+                            case "gsx$p-thermometers":
+                                legibleTitle = "Thermometers"
+                                break
+                            case "gsx$p-gowns":
+                                legibleTitle = 'Gowns'
+                                break
+                            case 'gsx$p-facecoveringsmasks':
+                                legibleTitle = 'Face Coverings & Masks'
+                                break
+                            case 'gsx$p-hvacandventilation':
+                                legibleTitle = 'HVAC and ventilation'
+                                break
+                            case 'All':
+                                legibleTitle = i
+                                break
+                            default:
+                                legibleTitle = i.substr(6)
+                                break
+                        }
+                        return {
+                            id: i,
+                            title: legibleTitle,
+                            isParent: i.includes('$p-') || i == 'All',
+                            vendorList: this.vendors.filter(item => {
+                                if (i == 'All') return true
+                                if (item[i].$t.toLowerCase().trim() == 'yes') {
+                                    return true
+                                } else return false
+                            })
+                        }
+                    })
+                })
+
+            },
+            closeForm() {
+                Cookies.set('formFilled', 'true');
+                this.showModal = false;
+            },
+            linkFormat(link) {
+                if (link.startsWith('http')) return link
+                return `//${link}`
+            },
+            hasValidLogoImage(vendor) {
+                return vendor.gsx$logolink.$t.includes('.jpg') ||
+                    vendor.gsx$logolink.$t.includes('.png') ||
+                    vendor.gsx$logolink.$t.includes('.jpeg')
+            },
+            onScroll(e) {
+                this.windowTop = e.target.documentElement.scrollTop;
+            },
+            getPosition(element) {
+                var xPosition = 0;
+                var yPosition = 0;
+
+                while (element) {
+                    xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+                    yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+                    element = element.offsetParent;
+                }
+
+                return {
+                    x: xPosition,
+                    y: yPosition
+                };
+            },
+            link(url, type) {
+                return `${type}:${url}`
+            },
+            hasProduct(vendor) {
+                return this._category_no_all.filter(category => {
+
+                    if (vendor[category.id].$t.toLowerCase() == 'yes') {
+
+                        return true
+                    } else return false
+                })
+            },
+            setPopUpCookie() {
+
+                let a = Cookies.get()
+                if (Cookies.get('formFilled') == 'true') {
+                    this.showModal = false;
+                } else this.showModal = true;
+
+
+                var button = document.querySelectorAll("div[role='button']")[0];
+                button.addEventListener("click", function() {
+                    Cookies.set('formFilled',
+                        true)
+                }, true);
+            }
+        },
+        mounted() {
+            this.fetchData()
+            this.setPopUpCookie()
+            document.getElementById('pop-up').appendChild(document.getElementById('form-container'))
+        },
+        computed: {
+            _category_no_all() {
+                let suffixIndex = 0
+                return this.categories.filter(category => {
+                    return category.id != 'All'
+                }).map((category, i) => {
+                    if (category.isParent) {
+                        suffixIndex++
+                    }
+
+                    return {
+                        title: category.title,
+                        suffix: suffixIndex < 2 ? '' : `_${suffixIndex}`,
+                        id: category.id
+                    }
+                })
+            }
+        },
+        watch: {
+            windowTop(v) {
+                document.getElementById('nav');
+                if (this.navScrollTop < this.windowTop) {
+                    this.navView = true
+                } else this.navView = false
+
+            }
+        }
+    })
+</script>
